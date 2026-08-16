@@ -1,0 +1,51 @@
+class Solution {
+    public int minProd(int[] arr) {
+        int n = arr.length;
+        int negativeCount = 0;
+        int zeroCount = 0;
+        int product = 1;
+        int maxNegative = Integer.MIN_VALUE;
+
+        for (int x : arr) {
+            if (x == 0) {
+                zeroCount++;
+            } else {
+                product *= x;
+
+                if (x < 0) {
+                    negativeCount++;
+                    maxNegative = Math.max(maxNegative, x);
+                }
+            }
+        }
+
+        // All elements are zero
+        if (zeroCount == n) {
+            return 0;
+        }
+
+        // No negative numbers
+        if (negativeCount == 0) {
+            if (zeroCount > 0) {
+                return 0;
+            }
+
+            int minPositive = Integer.MAX_VALUE;
+            for (int x : arr) {
+                if (x > 0) {
+                    minPositive = Math.min(minPositive, x);
+                }
+            }
+            return minPositive;
+        }
+
+        // Odd number of negative elements
+        if (negativeCount % 2 == 1) {
+            return product;
+        }
+
+        // Even number of negative elements:
+        // Remove the negative number closest to zero
+        return product / maxNegative;
+    }
+}
